@@ -8,6 +8,7 @@ export const todosApi = createApi({
   endpoints: (builder) => ({
     getTodos: builder.query({
       query: () => `/todos`,
+      transformResponse: (res) => res.sort((a, b) => b.id - a.id),
       providesTags: ["Todos"],
     }),
     getTodo: builder.query({
@@ -29,11 +30,12 @@ export const todosApi = createApi({
       }),
     }),
     deleteTodo: builder.mutation({
-      query: (id) => ({
+      query: ({ id }) => ({
         url: `/todos/${id}`,
         method: "DELETE",
         body: id,
       }),
+      invalidatesTags: ["Todos"],
     }),
   }),
 });
